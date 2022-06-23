@@ -19,7 +19,7 @@ let param =
     "-callgraph-mode"
     (optional (Command.Arg_type.create of_string))
     ~doc:
-      "When magic-trace is running with sampling collection mode, this sets how it \
+      " When magic-trace is running with sampling collection mode, this sets how it \
        should reconstruct callstacks. The options are Last_branch_record (lbr), Dwarf \
        (dwarf), and Frame_pointers (fp). Will default to Last_branch_record if supported \
        and Dwarf otherwise."
