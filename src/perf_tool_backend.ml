@@ -392,8 +392,8 @@ let decode_events
         let fields_opts =
           match collection_mode with
           | Intel_processor_trace ->
-            [ "-F"; "pid,tid,time,flags,ip,addr,sym,symoff,synth,dso" ]
-          | Stacktrace_sampling -> [ "-F"; "pid,tid,time,ip,sym,symoff,dso" ]
+            [ "-F"; "pid,tid,time,flags,ip,addr,sym,symoff,synth,dso,event" ]
+          | Stacktrace_sampling -> [ "-F"; "pid,tid,time,ip,sym,symoff,dso,event" ]
         in
         let args =
           List.concat
