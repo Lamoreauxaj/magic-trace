@@ -8,21 +8,38 @@ let saturating_sub_i64 a b =
   | Some offset -> offset
 ;;
 
-let int64_of_hex_string str =
+(* module type tmp = sig *)
+(*   type t *)
+
+(*   include Int_intf.S with type t := t *)
+
+(*   val of_int : int -> t *)
+(* end *)
+
+let of_hex_string (type a) (module M :
+                           module type sig
+                             include Int_intf.S
+                             val of_int : int -> t
+                           end) str =
   (* Bit hacks for fast parsing of hex strings.
    *
    * Note that in ASCII, ('1' | 'a' | 'A') & 0xF = 1.
    *
    * So for each character, take the bottom 4 bits, and add 9 if it's
    * not a digit. *)
-  let res = ref 0L in
+  let res = ref (M.of_int 0) in
   for i = 0 to String.length str - 1 do
-    let open Int64 in
+    let open M in
     let c = of_int (Char.to_int (String.unsafe_get str i)) in
-    res := (!res lsl 4) lor ((c land 0xFL) + ((c lsr 6) lor ((c lsr 3) land 0x8L)))
+    res
+      := (!res lsl 4)
+         lor ((c land M.of_int 0xF) + ((c lsr 6) lor ((c lsr 3) land M.of_int 0x8)))
   done;
   !res
 ;;
+
+let int64_of_hex_string = of_hex_string (module Int64)
+let _int_of_hex_string = of_hex_string (module Int)
 
 let%test_module _ =
   (module struct
